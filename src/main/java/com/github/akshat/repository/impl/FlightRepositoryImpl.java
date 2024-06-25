@@ -1,5 +1,6 @@
 package com.github.akshat.repository.impl;
 
+import com.github.akshat.exceptions.DataNotFoundException;
 import com.github.akshat.entities.FlightEntity;
 import com.github.akshat.entities.FlightSearchQuery;
 import com.github.akshat.enums.SeatClassEnum;
@@ -150,12 +151,20 @@ public class FlightRepositoryImpl implements FlightRepository {
     }
 
     @Override
-    public void updateSeats(String flightNumber, SeatClassEnum seatClass, Integer seatBooked) {
+    public void updateSeats(String flightNumber, SeatClassEnum seatClass, Integer seatBooked) throws DataNotFoundException {
+        if(!flightsMap.containsKey(flightNumber)) {
+            throw new DataNotFoundException("Flight does not exist");
+        }
+
         flightsMap.get(flightNumber).updateSeats(seatClass, seatBooked);
     }
 
     @Override
-    public double getFare(String flightNumber, SeatClassEnum seatClass) {
+    public double getFare(String flightNumber, SeatClassEnum seatClass) throws DataNotFoundException {
+        // check if flight exists
+        if (!flightsMap.containsKey(flightNumber)) {
+            throw new DataNotFoundException("Flight does not exist");
+        }
         return flightsMap.get(flightNumber).getFareBySeatClass(seatClass);
     }
 

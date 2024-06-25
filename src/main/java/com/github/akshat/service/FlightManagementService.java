@@ -1,5 +1,6 @@
 package com.github.akshat.service;
 
+import com.github.akshat.exceptions.DataNotFoundException;
 import com.github.akshat.entities.FlightEntity;
 import com.github.akshat.entities.FlightSearchQuery;
 import com.github.akshat.entities.Schedule;
@@ -24,7 +25,13 @@ public class FlightManagementService implements IFlightManagementService{
 
     //update seats
     public void updateSeats(String flightNumber, SeatClassEnum seatClass, Integer seats) {
-        flightRepository.updateSeats(flightNumber, seatClass, seats);
+        try {
+            flightRepository.updateSeats(flightNumber, seatClass, seats);
+        } catch (DataNotFoundException e) {
+            System.out.println("Flight not found");
+        } catch (Exception e) {
+            System.out.println("Booking failed. Aborting  the booking");
+        }
     }
     public List<FlightEntity> getAllFlights(String origin, String destination, String startTimeString, String endTimeString, String airline,String seatClass, Integer seats) {
 
@@ -100,7 +107,8 @@ public class FlightManagementService implements IFlightManagementService{
     }
 
     //getFare
-    public double getFare(String flightNumber, SeatClassEnum seatClass) {
+    public double getFare(String flightNumber, SeatClassEnum seatClass) throws DataNotFoundException {
+
         return flightRepository.getFare(flightNumber, seatClass);
     }
     private Date getDateFromString(String startTimeString) {

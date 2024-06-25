@@ -1,5 +1,6 @@
 package com.github.akshat.repository;
 
+import com.github.akshat.exceptions.DataNotFoundException;
 import com.github.akshat.entities.FlightEntity;
 import com.github.akshat.entities.FlightSearchQuery;
 import com.github.akshat.enums.SeatClassEnum;
@@ -14,7 +15,7 @@ public interface FlightRepository {
     void cancelFlight(String flightNumber);
     int getAvailableSeats(String flightNumber, String seatClass);
 
-    void updateSeats(String flightNumber, SeatClassEnum seatClass, Integer seatBooked);
+    void updateSeats(String flightNumber, SeatClassEnum seatClass, Integer seatBooked) throws DataNotFoundException;
 
-    double getFare(String flightNumber, SeatClassEnum seatClass);
+    double getFare(String flightNumber, SeatClassEnum seatClass) throws DataNotFoundException;
 }
